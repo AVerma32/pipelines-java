@@ -8,7 +8,7 @@ pool:
 
 variables:
   MAVEN_OPTS: "-Xmx1024m"
-  JAVA_HOME: $(JAVA_HOME_11_X64)
+  JAVA_HOME: /opt/homebrew/Cellar/openjdk/23.0.2/libexec/openjdk.jdk/Contents/Home
 
 steps:
 
