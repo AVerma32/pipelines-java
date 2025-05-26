@@ -1,23 +1,26 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
-- main
+  branches:
+    include:
+      - main
 
 pool:
-  name: macOS-pool
+  name: Default  # Name of your self-hosted agent pool
+
+variables:
+  MAVEN_OPTS: "-Xmx1024m"
+  JAVA_HOME: $(JAVA_HOME_11_X64)
 
 steps:
 
-- task: Maven@4
+# Print Java version
+- script: java -version
+  displayName: 'Check Java version'
+
+# Print Maven version
+- script: mvn -version
+  displayName: 'Check Maven version'
+
+# Restore dependencies (optional, if using a cache strategy)
+- task: Cache@2
   inputs:
-    mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+    key: 'maven | "$(Agent.OS)" | **/pom.xml'
